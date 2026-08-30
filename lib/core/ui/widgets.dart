@@ -31,7 +31,7 @@ class Widgets {
   }
 
   //custom button
-  static customButton({
+  static SizedBox customButton({
     required String buttonLabel,
     required VoidCallback callback,
     bool outlined = false,

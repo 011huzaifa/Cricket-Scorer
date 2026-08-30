@@ -14,7 +14,7 @@ class _MatchSelectionScreen extends State<MatchSelectionScreen> {
   TextEditingController team1 = TextEditingController();
   TextEditingController team2 = TextEditingController();
   String? _selectedTeam;
-  String teams = "";
+  String battingTeam = "";
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -55,7 +55,7 @@ class _MatchSelectionScreen extends State<MatchSelectionScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 spacing: 10,
                                 children: [
-                                  Text(teams),
+                                  Text(battingTeam),
                                   TextFormField(
                                     controller: team1,
                                     onChanged: (value) => setDialogState(() {}),
@@ -100,12 +100,15 @@ class _MatchSelectionScreen extends State<MatchSelectionScreen> {
                                     onChanged: (String? value) {
                                       setDialogState(() {
                                         _selectedTeam = value;
+                                        battingTeam = value!;
                                       });
                                     },
                                     child: Column(
                                       children: [
                                         RadioListTile<String>(
-                                          value: "Team 1",
+                                          value: team1.text.isEmpty
+                                              ? "Team 1"
+                                              : team1.text,
                                           title: Text(
                                             team1.text.isEmpty
                                                 ? "Team 1"
@@ -113,7 +116,9 @@ class _MatchSelectionScreen extends State<MatchSelectionScreen> {
                                           ),
                                         ),
                                         RadioListTile<String>(
-                                          value: "Team 2",
+                                          value: team2.text.isEmpty
+                                              ? "Team 2"
+                                              : team2.text,
                                           title: Text(
                                             team2.text.isEmpty
                                                 ? "Team 2"
@@ -128,13 +133,14 @@ class _MatchSelectionScreen extends State<MatchSelectionScreen> {
                                     fullWidth: true,
                                     callback: () {
                                       if (_formKey.currentState!.validate()) {
-                                        Navigator.push(
+                                        Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) {
                                               return Home(
                                                 team1Name: team1.text,
                                                 team2Name: team2.text,
+                                                battingTeam: battingTeam,
                                               );
                                             },
                                           ),

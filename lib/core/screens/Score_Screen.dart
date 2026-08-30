@@ -6,19 +6,38 @@ import 'package:flutter/material.dart';
 class Home extends StatefulWidget {
   final String team1Name;
   final String team2Name;
-  const Home({super.key, required this.team1Name, required this.team2Name});
+  final String battingTeam;
+  const Home({
+    super.key,
+    required this.team1Name,
+    required this.team2Name,
+    required this.battingTeam,
+  });
 
   @override
   State<Home> createState() => _Home();
 }
 
 class _Home extends State<Home> {
+  String yetToBatTeam = "";
   int score = 0;
   int wickets = 0;
   int balls = 0;
 
   List<GameState> undoStack = [];
   List<GameState> redoStack = [];
+
+  //batting second logic
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.battingTeam != widget.team1Name) {
+      yetToBatTeam = "${widget.team1Name} yet to bat";
+    } else {
+      yetToBatTeam = "${widget.team2Name} yet to bat";
+    }
+  }
 
   //save current state
   void saveState() {
@@ -77,6 +96,7 @@ class _Home extends State<Home> {
     });
   }
 
+  // extras
   void extras() {
     setState(() {
       saveState();
@@ -104,10 +124,30 @@ class _Home extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Team names
-            Text(
-              "${widget.team1Name} vs ${widget.team2Name}",
-              style: TextStyle(fontSize: 22),
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(left: 30, right: 30),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Team names
+                  Text(
+                    "${widget.team1Name} vs ${widget.team2Name}",
+                    style: TextStyle(fontSize: 23),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Batting 1st & 2nd teams
+                      Text(
+                        "${widget.battingTeam} is batting first",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Text(yetToBatTeam, style: TextStyle(fontSize: 14)),
+                    ],
+                  ),
+                ],
+              ),
             ),
             //Score, Wickets and balls
             Container(
