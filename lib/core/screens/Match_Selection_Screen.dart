@@ -2,6 +2,7 @@ import 'package:cricket_scorer/core/constants/AppColors.dart';
 import 'package:cricket_scorer/core/screens/Score_Screen.dart';
 import 'package:cricket_scorer/core/ui/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class MatchSelectionScreen extends StatefulWidget {
   const MatchSelectionScreen({super.key});
@@ -13,6 +14,7 @@ class MatchSelectionScreen extends StatefulWidget {
 class _MatchSelectionScreen extends State<MatchSelectionScreen> {
   TextEditingController team1 = TextEditingController();
   TextEditingController team2 = TextEditingController();
+  TextEditingController oversController = TextEditingController();
   String? _selectedTeam;
   String battingTeam = "";
   final _formKey = GlobalKey<FormState>();
@@ -40,6 +42,7 @@ class _MatchSelectionScreen extends State<MatchSelectionScreen> {
               callback: () => {
                 showDialog(
                   context: context,
+                  fullscreenDialog: true,
                   builder: (context) {
                     return StatefulBuilder(
                       builder: (context, setDialogState) {
@@ -48,7 +51,7 @@ class _MatchSelectionScreen extends State<MatchSelectionScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           content: SizedBox(
-                            height: 360,
+                            // height: 435,
                             child: Form(
                               key: _formKey,
                               child: Column(
@@ -86,6 +89,29 @@ class _MatchSelectionScreen extends State<MatchSelectionScreen> {
                                     },
                                     decoration: InputDecoration(
                                       hintText: "2nd Team Name",
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 2,
+                                          color: Appcolors.primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: <TextInputFormatter> [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                    ],
+                                    controller: oversController,
+                                    onChanged: (value) => setDialogState(() {}),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "Enter Overs";
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText: "Overs?",
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           width: 2,
@@ -141,6 +167,7 @@ class _MatchSelectionScreen extends State<MatchSelectionScreen> {
                                                 team1Name: team1.text,
                                                 team2Name: team2.text,
                                                 battingTeam: battingTeam,
+                                                totalOvers: int.parse(oversController.text),
                                               );
                                             },
                                           ),

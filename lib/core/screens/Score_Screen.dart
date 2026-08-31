@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 class Home extends StatefulWidget {
   final String team1Name;
   final String team2Name;
-  final String battingTeam;
-  const Home({
+  String battingTeam;
+  final int totalOvers;
+  Home({
     super.key,
     required this.team1Name,
     required this.team2Name,
     required this.battingTeam,
+    required this.totalOvers,
   });
 
   @override
@@ -23,6 +25,8 @@ class _Home extends State<Home> {
   int score = 0;
   int wickets = 0;
   int balls = 0;
+  String oversCompleted = "0.0";
+  late int targetScore;
 
   List<GameState> undoStack = [];
   List<GameState> redoStack = [];
@@ -31,11 +35,10 @@ class _Home extends State<Home> {
   @override
   void initState() {
     super.initState();
-
     if (widget.battingTeam != widget.team1Name) {
-      yetToBatTeam = "${widget.team1Name} yet to bat";
+      yetToBatTeam = widget.team1Name;
     } else {
-      yetToBatTeam = "${widget.team2Name} yet to bat";
+      yetToBatTeam = widget.team2Name;
     }
   }
 
@@ -82,6 +85,7 @@ class _Home extends State<Home> {
       score = 0;
       wickets = 0;
       balls = 0;
+      oversCompleted = "0.0";
       undoStack.clear();
       redoStack.clear();
     });
@@ -93,7 +97,56 @@ class _Home extends State<Home> {
       saveState();
       score += run;
       balls++;
+      oversCompleted = "${balls ~/ 6}.${balls % 6}";
     });
+    inngOver();
+    // targetScoreFunc();
+  }
+
+  // Innings over
+  void inngOver() {
+    if (balls == widget.totalOvers * 6 || wickets == 10) {
+      showDialog(
+        barrierDismissible: false,
+        context: (context),
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            title: Text(widget.battingTeam),
+            content: Text(
+              "$yetToBatTeam needs ${score + 1} to win in $balls balls",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  targetScore = score;
+                  resetInnings();
+                },
+                child: Text(
+                  "Yes",
+                  style: TextStyle(color: Appcolors.primaryColor),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+      widget.battingTeam = "${widget.battingTeam} $score / $wickets";
+      yetToBatTeam = "$yetToBatTeam needs ${score + 1} to win";
+    }
+  }
+
+  //target score
+  void targetScoreFunc() {
+    if (score >= targetScore) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(title: Text("$yetToBatTeam team won"));
+        },
+      );
+    }
   }
 
   // extras
@@ -139,10 +192,7 @@ class _Home extends State<Home> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Batting 1st & 2nd teams
-                      Text(
-                        "${widget.battingTeam} is batting first",
-                        style: TextStyle(fontSize: 14),
-                      ),
+                      Text(widget.battingTeam, style: TextStyle(fontSize: 14)),
                       Text(yetToBatTeam, style: TextStyle(fontSize: 14)),
                     ],
                   ),
@@ -166,7 +216,8 @@ class _Home extends State<Home> {
                   // Score and Wickets
                   Text(
                     "$score / $wickets",
-                    style: TextStyle(fontSize: 33, color: Colors.white),
+                    style: TextStyle(fontSize: 35, color: Colors.white),
+                    textAlign: TextAlign.center,
                   ),
                   Divider(
                     height: 8,
@@ -177,7 +228,7 @@ class _Home extends State<Home> {
                   ),
                   // balls
                   Text(
-                    "Overs ${balls ~/ 6}.${balls % 6}",
+                    "Overs $oversCompleted / ${widget.totalOvers}",
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ],
@@ -271,33 +322,7 @@ class _Home extends State<Home> {
                       addRuns(0);
                       wickets++;
                     }
-                    if (wickets == 10) {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: (context),
-                        builder: (context) {
-                          return AlertDialog(
-                            backgroundColor: Colors.white,
-                            title: Text("Innings Over!"),
-                            content: Text("Want to start again?"),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  resetInnings();
-                                },
-                                child: Text(
-                                  "Yes",
-                                  style: TextStyle(
-                                    color: Appcolors.primaryColor,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
+                    inngOver();
                   });
                 },
                 child: Text(
