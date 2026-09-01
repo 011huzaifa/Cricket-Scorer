@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cricket_scorer/core/screens/Match_Selection_Screen.dart';
+import 'package:cricket_scorer/screens/setup/setup_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -21,7 +21,7 @@ class _SplashScreen extends State<SplashScreen> {
         context,
         MaterialPageRoute(
           builder: (_) {
-            return MatchSelectionScreen();
+            return SetupScreen();
           },
         ),
       ),

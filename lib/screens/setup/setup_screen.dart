@@ -1,17 +1,17 @@
 import 'package:cricket_scorer/core/constants/AppColors.dart';
-import 'package:cricket_scorer/core/screens/Score_Screen.dart';
+import 'package:cricket_scorer/screens/score_screen/score_screen.dart';
 import 'package:cricket_scorer/core/ui/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class MatchSelectionScreen extends StatefulWidget {
-  const MatchSelectionScreen({super.key});
+class SetupScreen extends StatefulWidget {
+  const SetupScreen({super.key});
 
   @override
-  State<MatchSelectionScreen> createState() => _MatchSelectionScreen();
+  State<SetupScreen> createState() => _SetupScreen();
 }
 
-class _MatchSelectionScreen extends State<MatchSelectionScreen> {
+class _SetupScreen extends State<SetupScreen> {
   TextEditingController team1 = TextEditingController();
   TextEditingController team2 = TextEditingController();
   TextEditingController oversController = TextEditingController();

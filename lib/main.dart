@@ -1,4 +1,4 @@
-import 'package:cricket_scorer/core/screens/Splash_Screen.dart';
+import 'package:cricket_scorer/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
