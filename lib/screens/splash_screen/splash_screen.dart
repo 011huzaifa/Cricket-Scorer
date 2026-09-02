@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cricket_scorer/screens/setup/setup_screen.dart';
+import 'package:cricket_scorer/screens/setup_screen/setup_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {

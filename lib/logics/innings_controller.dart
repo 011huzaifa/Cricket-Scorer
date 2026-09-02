@@ -3,6 +3,8 @@ class InningsController {
   int wickets = 0;
   int balls = 0;
   String completedOvers = "0.0";
+  String? secondBattingTeam;
+  int? targetScore;
 
   //add runs
   void addRun(int run) {
@@ -31,6 +33,6 @@ class InningsController {
     score = 0;
     wickets = 0;
     balls = 0;
-    completedOvers = "0.0";
+    targetScore = null;
   }
 }

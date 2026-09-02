@@ -23,16 +23,14 @@ class Home extends StatefulWidget {
 }
 
 class _Home extends State<Home> {
-  String yetToBatTeam = "";
-
   //batting second logic
   @override
   void initState() {
     super.initState();
     if (widget.battingTeam != widget.team1Name) {
-      yetToBatTeam = widget.team1Name;
+      innings.secondBattingTeam = widget.team1Name;
     } else {
-      yetToBatTeam = widget.team2Name;
+      innings.secondBattingTeam = widget.team2Name;
     }
   }
 
@@ -49,6 +47,20 @@ class _Home extends State<Home> {
     if (innings.isInningsOver(widget.totalOvers)) {
       inngOver();
     }
+
+    //2nd innings
+
+    if (innings.targetScore == null) return;
+    if (innings.score > innings.targetScore!) {
+      InningsOverDialog.customDialog(
+        context,
+        titlez: "Match Won",
+        content: "${innings.secondBattingTeam} team won",
+        callback: () {
+          Navigator.pop(context);
+        },
+      );
+    }
   }
 
   // Innings over
@@ -57,15 +69,17 @@ class _Home extends State<Home> {
       context,
       titlez: widget.battingTeam,
       content:
-          "$yetToBatTeam needs ${innings.score + 1} to win in ${widget.totalOvers * 6} balls",
+          "${innings.secondBattingTeam} needs ${innings.score + 1} to win in ${widget.totalOvers * 6} balls",
       callback: () {
         Navigator.pop(context);
+        innings.targetScore = innings.score;
         setState(() {
           innings.resetInnings();
         });
       },
     );
-    widget.battingTeam = "${innings.score} / ${innings.wickets}";
+    widget.battingTeam =
+        "${widget.battingTeam}  ${innings.score} / ${innings.wickets}";
   }
 
   @override
@@ -99,7 +113,10 @@ class _Home extends State<Home> {
                     children: [
                       // Batting 1st & 2nd teams
                       Text(widget.battingTeam, style: TextStyle(fontSize: 14)),
-                      Text(yetToBatTeam, style: TextStyle(fontSize: 14)),
+                      Text(
+                        "${innings.secondBattingTeam}",
+                        style: TextStyle(fontSize: 14),
+                      ),
                     ],
                   ),
                 ],
@@ -278,6 +295,7 @@ class _Home extends State<Home> {
                                 Navigator.pop(context);
                                 setState(() {
                                   innings.resetInnings();
+                                  widget.battingTeam = "${widget.battingTeam} ";
                                 });
                               },
                               child: Text(
