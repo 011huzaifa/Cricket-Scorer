@@ -1,5 +1,5 @@
 import 'package:cricket_scorer/logics/innings_controller.dart';
-import 'package:cricket_scorer/model/GameState.dart';
+import 'package:cricket_scorer/model/game_state.dart';
 
 class UndoRedoManager {
   final InningsController innings;

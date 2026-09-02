@@ -8,7 +8,7 @@ class InningsController {
   void addRun(int run) {
     score += run;
     balls++;
-    completedOvers = "${balls ~/ 6}.${balls % 6}";
+    // completedOvers = "${balls ~/ 6}.${balls % 6}";
   }
 
   // add wickets

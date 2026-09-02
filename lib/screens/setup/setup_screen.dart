@@ -1,6 +1,6 @@
 import 'package:cricket_scorer/core/constants/AppColors.dart';
 import 'package:cricket_scorer/screens/score_screen/score_screen.dart';
-import 'package:cricket_scorer/core/ui/widgets.dart';
+import 'package:cricket_scorer/core/ui/app_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -40,26 +40,29 @@ class _SetupScreen extends State<SetupScreen> {
               buttonLabel: "New Match",
               outlined: false,
               callback: () => {
-                showDialog(
+                showModalBottomSheet(
+                  sheetAnimationStyle: AnimationStyle(
+                    duration: Duration(milliseconds: 650),
+                    reverseDuration: Duration(milliseconds: 750),
+                  ),
+                  isScrollControlled: true,
+                  showDragHandle: true,
+                  backgroundColor: Colors.indigo[50],
                   context: context,
-                  fullscreenDialog: true,
-                  builder: (context) {
+                  builder: (_) {
                     return StatefulBuilder(
                       builder: (context, setDialogState) {
-                        return AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          content: SizedBox(
-                            // height: 435,
+                        return FractionallySizedBox(
+                          heightFactor: 0.90,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 30, right: 30),
                             child: Form(
                               key: _formKey,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                spacing: 10,
+                                spacing: 12,
                                 children: [
-                                  Text(battingTeam),
-                                  TextFormField(
+                                  Widgets.customTextFeild(
                                     controller: team1,
                                     onChanged: (value) => setDialogState(() {}),
                                     validator: (value) {
@@ -68,17 +71,10 @@ class _SetupScreen extends State<SetupScreen> {
                                       }
                                       return null;
                                     },
-                                    decoration: InputDecoration(
-                                      hintText: "1st Team Name",
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 2,
-                                          color: Appcolors.primaryColor,
-                                        ),
-                                      ),
-                                    ),
+                                    hintText: "Team 1",
+                                    labelText: "Team Name",
                                   ),
-                                  TextFormField(
+                                  Widgets.customTextFeild(
                                     controller: team2,
                                     onChanged: (value) => setDialogState(() {}),
                                     validator: (value) {
@@ -87,19 +83,12 @@ class _SetupScreen extends State<SetupScreen> {
                                       }
                                       return null;
                                     },
-                                    decoration: InputDecoration(
-                                      hintText: "2nd Team Name",
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 2,
-                                          color: Appcolors.primaryColor,
-                                        ),
-                                      ),
-                                    ),
+                                    hintText: "Team 2",
+                                    labelText: "Team Name",
                                   ),
-                                  TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter> [
+                                  Widgets.customTextFeild(
+                                    inputType: TextInputType.number,
+                                    inputFormatter: <TextInputFormatter>[
                                       FilteringTextInputFormatter.digitsOnly,
                                     ],
                                     controller: oversController,
@@ -110,15 +99,8 @@ class _SetupScreen extends State<SetupScreen> {
                                       }
                                       return null;
                                     },
-                                    decoration: InputDecoration(
-                                      hintText: "Overs?",
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 2,
-                                          color: Appcolors.primaryColor,
-                                        ),
-                                      ),
-                                    ),
+                                    hintText: "Overs?",
+                                    labelText: "Overs",
                                   ),
                                   Text("Who will bat first?"),
                                   RadioGroup<String>(
@@ -155,7 +137,7 @@ class _SetupScreen extends State<SetupScreen> {
                                     ),
                                   ),
                                   Widgets.customButton(
-                                    buttonLabel: "Submit",
+                                    buttonLabel: "Start",
                                     fullWidth: true,
                                     callback: () {
                                       if (_formKey.currentState!.validate()) {
@@ -167,7 +149,9 @@ class _SetupScreen extends State<SetupScreen> {
                                                 team1Name: team1.text,
                                                 team2Name: team2.text,
                                                 battingTeam: battingTeam,
-                                                totalOvers: int.parse(oversController.text),
+                                                totalOvers: int.parse(
+                                                  oversController.text,
+                                                ),
                                               );
                                             },
                                           ),

@@ -1,5 +1,6 @@
 import 'package:cricket_scorer/core/constants/AppColors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Widgets {
   // Score Button
@@ -57,6 +58,26 @@ class Widgets {
         ),
         child: Text(buttonLabel),
       ),
+    );
+  }
+
+  //textfeild
+  static customTextFeild({
+    required TextEditingController controller,
+    required ValueChanged<String> onChanged,
+    required FormFieldValidator<String> validator,
+    required String hintText,
+    required String labelText,
+    TextInputType? inputType,
+    List<TextInputFormatter>? inputFormatter,
+  }) {
+    return TextFormField(
+      keyboardType: inputType,
+      inputFormatters: inputFormatter,
+      controller: controller,
+      onChanged: onChanged,
+      validator: validator,
+      decoration: InputDecoration(hintText: hintText, labelText: labelText),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:cricket_scorer/logics/innings_controller.dart';
 import 'package:cricket_scorer/logics/undo_redo_manager.dart';
 import 'package:cricket_scorer/core/constants/AppColors.dart';
-import 'package:cricket_scorer/core/ui/widgets.dart';
+import 'package:cricket_scorer/core/ui/app_widgets.dart';
 import 'package:cricket_scorer/screens/score_screen/widgets/innings_over_dialog.dart';
 import 'package:flutter/material.dart';
 
@@ -24,11 +24,6 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
   String yetToBatTeam = "";
-  int score = 0;
-  int wickets = 0;
-  int balls = 0;
-  String oversCompleted = "0.0";
-  int? targetScore;
 
   //batting second logic
   @override
@@ -65,25 +60,12 @@ class _Home extends State<Home> {
           "$yetToBatTeam needs ${innings.score + 1} to win in ${widget.totalOvers * 6} balls",
       callback: () {
         Navigator.pop(context);
-        targetScore = score;
         setState(() {
           innings.resetInnings();
         });
       },
     );
-    widget.battingTeam = "$yetToBatTeam $score / $wickets";
-  }
-
-  //target score
-  void targetScoreFunc() {
-    if (score > targetScore!) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(title: Text("$yetToBatTeam team won"));
-        },
-      );
-    }
+    widget.battingTeam = "${innings.score} / ${innings.wickets}";
   }
 
   @override
@@ -152,7 +134,7 @@ class _Home extends State<Home> {
                   ),
                   // balls
                   Text(
-                    "Overs ${innings.completedOvers} / ${widget.totalOvers}",
+                    "Overs ${innings.balls ~/ 6}.${innings.balls % 6} / ${widget.totalOvers}",
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ],
